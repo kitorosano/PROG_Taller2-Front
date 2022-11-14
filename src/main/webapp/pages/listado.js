@@ -87,14 +87,13 @@ function numPages() {
     return Math.ceil(totalUsuarios / usuariosPerPage);
 }
 
-function editandoUsuario(index) {
-    let usuario = usuariosArray[index];
+function editandoUsuario(nombre, apellido, fechaNac, correo, direccion) {
     // Rellenar formulario con datos del usuario
-    HTML_INPUT_NOMBRE.val(usuario.nombre);
-    HTML_INPUT_APELLIDO.val(usuario.apellido);
-    HTML_INPUT_FECHANAC.val(usuario.fechaNac);
-    HTML_INPUT_CORREO.attr('readonly', true).val(usuario.correo);
-    HTML_INPUT_DIRECCION.val(usuario.direccion);
+    HTML_INPUT_NOMBRE.val(nombre);
+    HTML_INPUT_APELLIDO.val(apellido);
+    HTML_INPUT_FECHANAC.val(fechaNac);
+    HTML_INPUT_CORREO.attr('readonly', true).val(correo);
+    HTML_INPUT_DIRECCION.val(direccion);
 
     cambiarEstadoEdicion(true);
 }

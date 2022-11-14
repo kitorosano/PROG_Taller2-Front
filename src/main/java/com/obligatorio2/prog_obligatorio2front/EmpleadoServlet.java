@@ -137,7 +137,7 @@ public class EmpleadoServlet extends HttpServlet {
             // Se crea el usuario en la base de datos
             fabrica.getIEmpleado().guardarEmpleado(empleado);
         
-            request.setAttribute("message", "Empleado creado exitosamente");
+            request.setAttribute("message", "Empleado actualizado exitosamente");
             request.setAttribute("messageType", "success");
             dispatchPage(request, response);
         } catch (RuntimeException e){

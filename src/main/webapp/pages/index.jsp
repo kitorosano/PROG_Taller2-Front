@@ -22,7 +22,7 @@
 <body>
 	<div class="header">
 		<p class="header__title">
-			<span>Tarea obligatoria -</span> Gestor de usuarios
+			<span>Tarea obligatoria 2 -</span> Gestor de empleados
 		</p>
 		<% if (!message.isEmpty()) { %>
 			<div id="message" role="alert" class="<%= messageType %>">
@@ -32,7 +32,7 @@
 	</div>
 	<div class="main">
 		<div class="listado">
-			<h1 class="listado__title">Listado de usuarios</h1>
+			<h1 class="listado__title">Listado de empleados</h1>
 			
 			<div class="listado__controls">
 				<input type="text" id="searchUsuario" placeholder="Buscar usuario por correo..."/>
@@ -74,6 +74,10 @@
 										<input type="hidden" name="activo" value="<%= empleado.getActivo()%>"/>
 										<button type="submit" class="table_button table_button__desactivar" data-active="<%=empleado.getActivo()%>"><%= empleado.getActivo() ? "Desactivar" : "Activar" %></button>
 									</form>
+									<% if(empleado.getActivo()) {%>
+										<button id="btnEditar-<%= empleado.getCorreo() %>" onclick="editandoUsuario('<%=empleado.getNombre()%>', '<%=empleado.getApellido()%>', '<%=empleado.getFechaNacimiento()%>', '<%=empleado.getCorreo()%>', '<%=empleado.getDireccion()%>')" class="table_button table_button__editar">Editar</button>
+										<button id="btnDejarEditar-<%= empleado.getCorreo() %>" onclick="dejarEditarUsuario('<%= empleado.getCorreo() %>')" class="table_button table_button__editar hidden">&#10006;</button>
+									<% } %>
 								</td>
 							</tr>
 				<% } %>
@@ -84,9 +88,9 @@
 		</div>
 		
 		<div class="formulario">
-			<h1 class="formulario__title">Formulario de registro</h1>
+			<h1 class="formulario__title">Formulario de empleado</h1>
 			<form id="formulario" style="width: 100%" method="post" action="">
-				<input type="hidden" name="_method" value="POST" />
+				<input type="hidden" id="_method" name="_method" value="POST" />
 				<div class="formulario_group">
 					<label for="input__nombre">Nombre</label>
 					<input name="nombre" type="text" id="input__nombre" maxlength="123" value="<%=nombre%>" required />
@@ -151,6 +155,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <%--	<script src="listado.js"></script>--%>
 	<script >
+		const HTML_FORM_METHOD = $('#_method');
         const HTML_INPUT_NOMBRE = $('#input__nombre');
         const HTML_ERROR_NOMBRE = $('#error__nombre');
         const HTML_ERROR_NOMBRE_TAMANIO = $('#error__nombre_tamanio');
@@ -306,6 +311,43 @@
             HTML_INPUT_CORREO.removeClass('valid');
             HTML_INPUT_DIRECCION.removeClass('valid');
         }
+
+		let editando = false;
+        function editandoUsuario(nombre, apellido, fechaNac, correo, direccion) {
+            editando = true;
+            HTML_FORM_METHOD.val('PUT');
+            HTML_FORM_BUTTON.text('Actualizar usuario');
+            HTML_INPUT_CORREO.attr('readonly', true);
+
+            // Rellenar formulario con datos del usuario
+            HTML_INPUT_NOMBRE.val(nombre);
+            HTML_INPUT_APELLIDO.val(apellido);
+            HTML_INPUT_FECHANAC.val(fechaNac);
+            HTML_INPUT_CORREO.val(correo);
+            HTML_INPUT_DIRECCION.val(direccion);
+
+            HTML_INPUT_EDITAR = document.getElementById('btnEditar-' + correo);
+            HTML_INPUT_EDITAR.classList.add('hidden');
+            
+            HTML_INPUT_DEJAR_EDITAR = document.getElementById('btnDejarEditar-' + correo);
+            HTML_INPUT_DEJAR_EDITAR.classList.remove('hidden');
+        }
+        
+        function dejarEditarUsuario(correo) {
+			editando = false;
+			HTML_FORM_METHOD.val('POST');
+			HTML_FORM_BUTTON.text('Crear usuario');
+			HTML_INPUT_CORREO.attr('readonly', false);
+
+			// Limpiar formulario
+			limpiarFormulario();
+			
+			HTML_INPUT_EDITAR = document.getElementById('btnEditar-' + correo);
+			HTML_INPUT_EDITAR.classList.remove('hidden');
+			
+			HTML_INPUT_DEJAR_EDITAR = document.getElementById('btnDejarEditar-' + correo);
+			HTML_INPUT_DEJAR_EDITAR.classList.add('hidden');
+		}
 	</script>
 </body>
 </html>
